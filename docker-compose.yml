@@ -1,0 +1,85 @@
+# version is now using "compose spec"
+# v2 and v3 are now combined!
+# docker-compose v1.27+ required
+version: '3.9'
+
+services:
+  website:
+    image: php:apache
+    depends_on:
+     - api
+    environment:
+      USERNAME: "toto"
+      PASSWORD: "python"
+    volumes:
+     - ./website:/var/www/html
+    ports:
+      - "8081:80"
+    networks:
+      - studentnetwork
+
+  api:
+      build: ./simple_api
+      ports:
+      -  5000:5000
+
+      # Define environment variable
+      environment:
+      -  NAME=World
+
+      networks:
+      - studentnetwork
+
+networks:
+   studentnetwork:
+
+#   api:
+#     image: python:2.7-buster
+#     build: ./simple_api
+
+#     volumes:
+#      - ./simple_api/dockerfile/Dockerfile:/var/www/html
+#     networks:
+#           - studentnetwork
+# networks:
+#   studentnetwork:
+
+
+# version: '3.9'
+
+# services:
+# # comme mon application est dans le meme dossier que le dockerfile je peux juste indique le chemin a mon build
+#   simple-api:
+#       build: ./simple_api
+#       ports:
+#       -  8000:5000
+
+#       # Define environment variable
+#       environment:
+#       -  NAME=World
+
+#       networks:
+#       - studentnetwork
+
+#   php:
+#   # Use the official PHP image with Apache as the base image
+#     image: php:apache
+#     # Set the working directory to /var/www/html
+#     working_dir: /var/www/html
+#     depends_on:
+#     - simple-api
+#     # Copy the current directory contents into the container at /var/www/html
+#     volumes:
+#     -  .:/var/www/html
+
+#     environment:
+#         -  USERNAME=toto
+#         -  PASSWORD=python
+
+#     networks:
+#           - studentnetwork
+#     # Expose port 80 to the outside world
+#     ports:
+#     -  80:80
+# networks:
+#   studentnetwork:
